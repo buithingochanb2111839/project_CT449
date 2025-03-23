@@ -3,18 +3,20 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
   },
   "author": "Bui Thi Ngoc Han",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongodb": "^6.15.0"
   },
   "devDependencies": {
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
+    "nodemon": "^3.1.9",
     "prettier": "^3.5.3"
   }
 }
