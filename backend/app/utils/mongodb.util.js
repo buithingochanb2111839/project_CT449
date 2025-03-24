@@ -1,9 +1,15 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require('mongoose');
 
 class MongoDB {
-    static connect = async (uri) => {
-        if (this.client) return this.client;
-        this.client = await MongoClient.connect(uri);
-        return this.client;
-    };
+    static async connect(uri) {
+        try {
+            await mongoose.connect(uri);
+            console.log('Kết nối MongoDB thành công!');
+        } catch (err) {
+            console.error('Lỗi kết nối MongoDB:', err.message);
+            throw err;
+        }
+    }
 }
+
+module.exports = MongoDB;
