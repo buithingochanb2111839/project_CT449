@@ -12,6 +12,10 @@ class DocGiaService extends BaseService {
   async register(data) {
     return (await this.api.post("/register", data)).data;
   }
+
+  async deleteById(id) {
+    return await this.api.delete(`/${id}`);
+  }
 }
 
 export default new DocGiaService();
