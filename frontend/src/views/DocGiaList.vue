@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h1 class="mb-4 text-center">Danh Sách Đọc Giả</h1>
+    <h1 class="mb-4 text-center">Danh Sách Độc Giả</h1>
     <table class="table table-bordered text-center">
       <thead>
         <tr>

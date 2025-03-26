@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-4 text-center">Chỉnh Sửa Thông Tin Đọc Giả</h2>
+    <h2 class="mb-4 text-center">Chỉnh Sửa Thông Tin Độc Giả</h2>
     <form @submit.prevent="updateDocGia">
       <div class="mb-3">
         <label for="hoLot" class="form-label">Họ</label>
@@ -73,8 +73,8 @@ export default {
         const response = await axios.get(`/api/docgia/${id}`);
         this.docgia = response.data;
       } catch (error) {
-        console.error("Lỗi khi lấy thông tin đọc giả:", error);
-        alert("Không thể lấy thông tin đọc giả.");
+        console.error("Lỗi khi lấy thông tin độc giả:", error);
+        alert("Không thể lấy thông tin đôc giả.");
       }
     },
     async updateDocGia() {

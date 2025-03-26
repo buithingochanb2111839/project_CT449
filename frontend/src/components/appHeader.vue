@@ -18,7 +18,7 @@
             <router-link :to="{ name: 'theodoi' }" class="nav-link mr-4">Phiếu Mượn</router-link>
           </li>
           <li class="nav-item" v-if="userRole === 'nhanvien'">
-            <router-link :to="{ name: 'alldocgia' }" class="nav-link mr-4">Đọc Giả</router-link>
+            <router-link :to="{ name: 'alldocgia' }" class="nav-link mr-4">Độc Giả</router-link>
           </li>
           <li class="nav-item" v-if="userRole === 'nhanvien' && Pro">
             <router-link :to="{ name: 'nhanvien' }" class="nav-link mr-4">Nhân Viên</router-link>
