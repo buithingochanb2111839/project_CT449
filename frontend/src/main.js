@@ -1,8 +1,21 @@
-import './assets/main.css'
+import { createApp } from 'vue';
+import App from './App.vue';
+import { defineRule } from 'vee-validate';
+import { required, email, min } from '@vee-validate/rules'; 
 
-import { createApp } from 'vue'
-import App from './App.vue'
-import "boostrap/dist/css/boostrap.min.css"
-import "@fortawesome/fontawesome-free/css/all.min.css"
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-createApp(App).mount('#app')
+import './assets/main.css';
+import router from "./router";
+
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+
+const app = createApp(App);
+
+app.use(router);
+
+app.mount('#app');

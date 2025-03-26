@@ -1,36 +1,32 @@
 <template>
-  <Form ref="form" @submit="submitNhanVien" :validation-schema="addNhanVienFormSchema">
+  <h2 class="text-center mt-4">Thêm Nhân viên</h2>
+  <Form ref="form" @submit="submitNhanVien" :validation-schema="nhanVienFormSchema">
     <div class="form-group">
       <label for="HoTenNV">Họ Tên:</label>
-      <Field id="HoTenNV" name="HoTenNV" as="input" type="text" class="form-control" v-model="nhanVienLocalStorage.HoTenNV" />
+      <Field id="HoTenNV" name="HoTenNV" as="input" type="text" class="form-control" v-model="nhanVienLocal.HoTenNV" />
       <ErrorMessage name="HoTenNV" class="error-feedback" />
     </div>
-
     <div class="form-group">
       <label for="SoDienThoai">Số Điện Thoại:</label>
-      <Field id="SoDienThoai" name="SoDienThoai" as="input" type="tel" class="form-control" v-model="nhanVienLocalStorage.SoDienThoai" />
+      <Field id="SoDienThoai" name="SoDienThoai" as="input" type="tel" class="form-control" v-model="nhanVienLocal.SoDienThoai" />
       <ErrorMessage name="SoDienThoai" class="error-feedback" />
     </div>
-
     <div class="form-group">
       <label for="Password">Mật Khẩu:</label>
-      <Field id="Password" name="Password" as="input" type="password" class="form-control" v-model="nhanVienLocalStorage.Password" />
+      <Field id="Password" name="Password" as="input" type="password" class="form-control" v-model="nhanVienLocal.Password" />
       <ErrorMessage name="Password" class="error-feedback" />
     </div>
-
     <div class="form-group">
       <label for="ChucVu">Chức Vụ:</label>
-      <Field id="ChucVu" name="ChucVu" as="input" type="text" class="form-control" v-model="nhanVienLocalStorage.ChucVu" />
+      <Field id="ChucVu" name="ChucVu" as="input" type="text" class="form-control" v-model="nhanVienLocal.ChucVu" />
       <ErrorMessage name="ChucVu" class="error-feedback" />
     </div>
-
     <div class="form-group">
       <label for="DiaChi">Địa Chỉ:</label>
-      <Field id="DiaChi" name="DiaChi" as="input" type="text" class="form-control" v-model="nhanVienLocalStorage.DiaChi" />
+      <Field id="DiaChi" name="DiaChi" as="input" type="text" class="form-control" v-model="nhanVienLocal.DiaChi" />
       <ErrorMessage name="DiaChi" class="error-feedback" />
     </div>
-
-    <div class="form-group text-center mt-3">
+    <div class="form-group text-center">
       <button type="submit" class="btn btn-primary">Thêm Nhân Viên</button>
     </div>
   </Form>
@@ -39,12 +35,16 @@
 <script>
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
+import axios from 'axios';
 
 export default {
-  components: { Form, Field, ErrorMessage },
-  emits: ["submit:nhanvien"],
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
   data() {
-    const addNhanVienFormSchema = yup.object().shape({
+    const nhanVienFormSchema = yup.object().shape({
       HoTenNV: yup.string().required("Họ tên không được để trống."),
       SoDienThoai: yup
         .string()
@@ -56,21 +56,30 @@ export default {
     });
 
     return {
-      nhanVienLocalStorage: {
-        HoTenNV: "",
-        SoDienThoai: "",
-        Password: "",
-        ChucVu: "",
-        DiaChi: "",
+      nhanVienLocal: {
+        HoTenNV: '',
+        SoDienThoai: '',
+        Password: '',
+        ChucVu: '',
+        DiaChi: '',
       },
-      addNhanVienFormSchema,
+      nhanVienFormSchema,
     };
   },
   methods: {
     async submitNhanVien() {
-      const isValid = await this.$refs.form.validate();
-      if (isValid) {
-        this.$emit("submit:nhanvien", this.nhanVienLocalStorage);
+      try {
+        const isValid = await this.$refs.form.validate();
+        if (isValid) {
+          
+          const response = await axios.post('http://localhost:3000/api/nhanvien/', this.nhanVienLocal);
+          console.log(response.data);
+          alert("Thêm nhân viên thành công!");
+          this.$router.push("/nhanvien");     
+        }
+      } catch (error) {
+        console.error("Lỗi khi thêm nhân viên:", error);
+        alert("Có lỗi xảy ra khi thêm nhân viên.");
       }
     },
   },

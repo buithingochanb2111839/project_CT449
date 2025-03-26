@@ -1,11 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const ApiError = require("./app/api-error");
 const app = express();
 const mainRouter = require("./app/routes/routes")
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'app', 'uploads')));
 
 app.use('/api', mainRouter);
 

@@ -15,10 +15,7 @@ export default {
 </script>
 <template>
     <div class="input-group">
-        <input type="text" 
-        class="form-control" 
-        placeholder="Nhập tên sách hoặc tên tác giả cần tìm" 
-        :value="modelValue"
+        <input type="text" class="form-control" placeholder="Nhập tên sách hoặc tên tác giả bạn cần tìm" :value="modelValue"
          @input="updateModelValue" 
          @keyup.enter="submit" />
         <div class="input-group-append">

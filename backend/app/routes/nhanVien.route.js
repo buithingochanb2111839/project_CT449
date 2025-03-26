@@ -8,6 +8,5 @@ router.post('/login', nhanvienController.loginNhanVien);
 router.get('/:id', nhanvienController.getNhanVienById);
 router.put('/:id', nhanvienController.updateNhanVien);
 router.delete('/:id', nhanvienController.deleteNhanVien);
-router.patch('/:id', nhanvienController.updateNhanVienPermission);
 
 module.exports = router;

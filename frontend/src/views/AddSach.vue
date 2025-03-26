@@ -1,5 +1,6 @@
 <template>
   <div class="addsach container mt-4">
+    <h2 class="mb-4 text-center">Thêm Sách Mới</h2>
     <form @submit.prevent="handleSubmit" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="TenSach" class="form-label">Tên Sách</label>
@@ -27,75 +28,74 @@
       </div>
 
       <div class="mb-3">
-        <label for="MaNXB" class="form-label">Nhà Xuất Bản</label>
+        <label for="MaNXB" class="form-label mb-2 mr-4">Nhà Xuất Bản</label>
         <select v-model="selectedNXB" @change="checkNXBSelection" class="form-select" required>
+          <option disabled value="">-- Chọn nhà xuất bản --</option>
           <option v-for="nxb in nxbList" :key="nxb._id" :value="nxb._id">
-            {{ nxb.TenNXB }}
+            {{ nxb.TenNXB }}  
           </option>
-          <option value="new">Thêm mới nhà xuất bản</option>
+          <option value="new">+ Thêm mới nhà xuất bản</option>
         </select>
       </div>
 
       <div v-if="isAddingNewNXB" class="mb-3">
-        <label class="form-label">Tên Nhà Xuất Bản Mới</label>
-        <input type="text" v-model="newNXB.TenNXB" required class="form-control" />
-        <label class="form-label mt-2">Địa Chỉ</label>
-        <input type="text" v-model="newNXB.DiaChi" class="form-control" />
-        <label class="form-label mt-2">Điện Thoại</label>
-        <input type="text" v-model="newNXB.DienThoai" class="form-control" />
+        <label for="newNXBName" class="form-label">Tên Nhà Xuất Bản Mới</label>
+        <input type="text" id="newNXBName" v-model="newNXB.TenNXB" required class="form-control" />
+        <label for="newNXBAddress" class="form-label mt-2">Địa Chỉ</label>
+        <input type="text" id="newNXBAddress" v-model="newNXB.DiaChi" class="form-control" />
+        <label for="newNXBPhone" class="form-label mt-2">Điện Thoại</label>
+        <input type="text" id="newNXBPhone" v-model="newNXB.DienThoai" class="form-control" />
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Ảnh Bìa</label>
-        <input type="file" @change="handleFileUpload" class="form-control" />
+        <label for="coverImage" class="form-label">Ảnh Bìa</label>
+        <input type="file" id="coverImage" @change="handleFileUpload" class="form-control" />
       </div>
 
-      <div class="form-group text-center">
+      <div class="text-center mt-4 mb-4">
         <button type="submit" class="btn btn-success">Thêm Sách</button>
       </div>
-
-      <p class="mt-2 text-success" v-if="message">{{ message }}</p>
+      <p v-if="message">{{ message }}</p>
     </form>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  emits: ["sach:added"],
   data() {
     return {
       sach: {
-        TenSach: "",
-        DonGia: "",
-        SoQuyen: "",
-        NamXuatBan: "",
-        TacGia: "",
+        TenSach: '',
+        DonGia: '',
+        SoQuyen: '',
+        NamXuatBan: '',
+        TacGia: '',
       },
       coverImage: null,
-      message: "",
+      message: '',
       nxbList: [],
       selectedNXB: null,
       isAddingNewNXB: false,
       newNXB: {
-        TenNXB: "",
-        DiaChi: "",
-        DienThoai: "",
-      },
+        TenNXB: '',
+        DiaChi: '',
+        DienThoai: ''
+      }
     };
   },
   methods: {
     async fetchNXBList() {
       try {
-        const response = await axios.get("/api/nxb");
+        const response = await axios.get('/api/nxb');
         this.nxbList = response.data;
       } catch (error) {
-        console.error("Lỗi khi tải danh sách NXB:", error);
+        console.error('Lỗi khi tải danh sách nhà xuất bản:', error);
       }
     },
     checkNXBSelection() {
-      this.isAddingNewNXB = this.selectedNXB === "new";
+      this.isAddingNewNXB = this.selectedNXB === 'new';
     },
     handleFileUpload(event) {
       this.coverImage = event.target.files[0];
@@ -103,53 +103,55 @@ export default {
     async handleSubmit() {
       try {
         const formData = new FormData();
-        Object.entries(this.sach).forEach(([key, value]) => {
-          formData.append(key, value);
-        });
+        formData.append('TenSach', this.sach.TenSach);
+        formData.append('DonGia', this.sach.DonGia);
+        formData.append('SoQuyen', this.sach.SoQuyen);
+        formData.append('NamXuatBan', this.sach.NamXuatBan);
+        formData.append('TacGia', this.sach.TacGia);
 
         if (this.isAddingNewNXB) {
-          const { data } = await axios.post("/api/nxb", this.newNXB);
-          formData.append("MaNXB", data._id);
+          const nxbResponse = await axios.post('/api/nxb', this.newNXB);
+          formData.append('MaNXB', nxbResponse.data._id);
         } else {
-          formData.append("MaNXB", this.selectedNXB);
+          formData.append('MaNXB', this.selectedNXB);
         }
 
         if (this.coverImage) {
-          formData.append("coverImage", this.coverImage);
+          formData.append('Image', this.coverImage);
         }
 
-        const res = await axios.post("/api/sach", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+        const response = await axios.post('/api/sach', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
 
-        this.message = "Sách đã được thêm thành công!";
+        this.message = 'Sách đã được thêm thành công!';
         this.resetForm();
-        this.$emit("sach:added", res.data);
+        this.$router.push("/");
       } catch (error) {
         this.message = `Lỗi khi thêm sách: ${error.response?.data?.message || error.message}`;
       }
     },
     resetForm() {
       this.sach = {
-        TenSach: "",
-        DonGia: "",
-        SoQuyen: "",
-        NamXuatBan: "",
-        TacGia: "",
+        TenSach: '',
+        DonGia: '',
+        SoQuyen: '',
+        NamXuatBan: '',
+        TacGia: '',
       };
       this.coverImage = null;
       this.selectedNXB = null;
       this.isAddingNewNXB = false;
       this.newNXB = {
-        TenNXB: "",
-        DiaChi: "",
-        DienThoai: "",
+        TenNXB: '',
+        DiaChi: '',
+        DienThoai: ''
       };
-    },
+    }
   },
   mounted() {
     this.fetchNXBList();
-  },
+  }
 };
 </script>
 

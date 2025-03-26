@@ -57,22 +57,7 @@ exports.getNhanVienById = async (id) => {
 };
 
 exports.updateNhanVien = async (id, data) => {
-  const { currentPassword, newPassword, ...updateData } = data;
-  
-  const nhanvien = await NhanVien.findById(id);
-  if (!nhanvien) throw new Error("Nhân viên không tồn tại");
-    
-  const isMatch = await bcrypt.compare(currentPassword, nhanvien.Password);
-  if (!isMatch) throw new Error("Mật khẩu cũ không chính xác");
-  
-  Object.assign(nhanvien, updateData);
-    
-  if (newPassword) {
-    nhanvien.Password = await bcrypt.hash(newPassword, 10);
-  }
-
-  await nhanvien.save();
-  return nhanvien;
+  return await NhanVien.findByIdAndUpdate(id, data, { new: true });
 };
 
 exports.deleteNhanVien = async (id) => {
@@ -80,27 +65,5 @@ exports.deleteNhanVien = async (id) => {
     return await NhanVien.findByIdAndDelete(id); 
   } catch (error) {
     throw new Error(`Lỗi khi xóa nhân viên: ${error.message}`);
-  }
-};
-
-exports.updateNhanVienPermission = async (id, role) => {
-  try {
-    if (role !== 0 && role !== 1) {
-      throw new Error('Giá trị không hợp lệ! Chỉ chấp nhận 0 hoặc 1.');
-    }
-
-    const nhanVien = await NhanVien.findByIdAndUpdate(
-      id,
-      { role },
-      { new: true } // Trả về document sau khi cập nhật
-    );
-
-    if (!nhanVien) {
-      throw new Error('Nhân viên không tồn tại.');
-    }
-
-    return nhanVien;
-  } catch (error) {
-    throw new Error(`Lỗi khi cập nhật quyền: ${error.message}`);
   }
 };
